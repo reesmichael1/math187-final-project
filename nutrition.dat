@@ -1,4 +1,6 @@
 set Dishes := 1VegThaiCurry 2AlooParatha 3BoiledEggMayoSandwich 4BroccoliParatha 5CheeseEggOmelette 6ChickenCutletSandwich 7ChickenFrankie 8ChickenFriedRice 9ChickenKheemaParatha 10ChickenPestoPasta 11CucumberSoyaPancakes 12DalKhichadiWithVegetables 13EggBhurjeeSandwich 14EggOatsUpma 15GreenPeasParatha 16HerbedRice 17MattarMushroom 18MethiThepla 19MixedVegetablesWithPaneer 20NargisiVegetable 21PalakAndCorn 22PalakPaneer 23PaneerAndCornBurger 24PaneerAndCubumberSandwich 25ScrambledEggsWithChicken;
+set Days := SUN MON TUE WED THUR FRI SAT;
+set Meals := Breakfast Lunch Dinner Snack;
 
 param:                      vegetarian  breakfast   lunch   dinner  snack   calories protein    satFat  transFat    unsatFat    vitaminA    vitaminC    vitaminD    vitaminE    vitaminK    sodium  calcium carbs   fiber   sugar   iron :=
 1VegThaiCurry               1   0   1   1   0   51.556  1.673   1.971   0       2.463   207.108     17.693  0       0.037   24.025  1352.403    0.504 6.868   3.938   1.482   1.911
@@ -32,3 +34,5 @@ param reqCalories := 2000;
 param reqProtein := 80;
 param weightCalories := 1;
 param weightProtein := 10;
+param MAX_SERVED := 2;
+param MAX_PER_DAY := 1;

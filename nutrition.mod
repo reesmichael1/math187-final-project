@@ -1,4 +1,6 @@
 set Dishes;
+set Days;
+set Meals;
 
 param protein{Dishes} >= 0;
 param calories{Dishes} >= 0;
@@ -23,32 +25,52 @@ param lunch{Dishes} >= 0;
 param dinner{Dishes} >= 0;
 param snack{Dishes} >= 0;
 
-
 param reqCalories >= 0;
-param weightCalories >- 0;
+param weightCalories >= 0;
 param reqProtein >= 0;
 param weightProtein >= 0;
-
+param MAX_SERVED >= 0;
+param MAX_PER_DAY >= 0;
 
 var pCalPlus >= 0;
 var pCalMinus >= 0;
 var pProtPlus >= 0;
 var pProtMinus >= 0;
 
-var amountToServe{Dishes} >= 0; # or not integer? 
-
-subject to NoMoreThan2{d in Dishes}:
-amountToServe[d] <= 2;
-
-subject to pCalPlusDefinition:
-pCalPlus >= sum{d in Dishes}(calories[d] * amountToServe[d]) - reqCalories;
-subject to pCalMinusDefinition:
-pCalMinus >= reqCalories - sum{d in Dishes}(calories[d] * amountToServe[d]);
-
-subject to pProtPlusDefinition:
-pProtPlus >= sum{d in Dishes}(protein[d] * amountToServe[d]) - reqProtein;
-subject to pProtMinusDefinition:
-pProtPlus >= reqProtein - sum{d in Dishes}(protein[d] * amountToServe[d]);
+var amountToServe{Dishes, Days, Meals} >= 0 integer;
 
 minimize Differences:
-weightCalories * (pCalPlus + pCalMinus); #+ weightProtein * (pProtPlus + pProtMinus);
+    weightCalories * (pCalPlus + pCalMinus); #+ weightProtein * (pProtPlus + pProtMinus);
+
+subject to SnackFoodForSnacks{dish in Dishes, day in Days}:
+    amountToServe[dish, day, 'Snack'] <= snack[dish];
+
+subject to LunchFoodForLunch{dish in Dishes, day in Days}:
+    amountToServe[dish, day, 'Lunch'] <= lunch[dish];
+
+subject to BreakfastFoodForBreakfast{dish in Dishes, day in Days}:
+    amountToServe[dish, day, 'Breakfast'] <= breakfast[dish];
+
+subject to DinnerFoodForDinner{dish in Dishes, day in Days}:
+    amountToServe[dish, day, 'Dinner'] <= dinner[dish];
+
+subject to NoMoreThanMax{dish in Dishes}:
+    sum{day in Days, meal in Meals} amountToServe[dish, day, meal] <= MAX_SERVED;
+
+subject to OnlyOncePerDay{dish in Dishes, day in Days}:
+    sum{meal in Meals} amountToServe[dish, day, meal] <= MAX_PER_DAY;
+
+subject to ThreeMealsPerDay{day in Days, meal in Meals}:
+    sum{dish in Dishes} amountToServe[dish, day, meal] >= 1;
+
+subject to pCalPlusDefinition{day in Days}:
+    pCalPlus >= sum{dish in Dishes, meal in Meals}(calories[dish] * amountToServe[dish, day, meal]) - reqCalories;
+
+subject to pCalMinusDefinition{day in Days}:
+    pCalMinus >= reqCalories - sum{dish in Dishes, meal in Meals}(calories[dish] * amountToServe[dish, day, meal]);
+
+subject to pProtPlusDefinition{day in Days}:
+    pProtPlus >= sum{dish in Dishes, meal in Meals}(protein[dish] * amountToServe[dish, day, meal]) - reqProtein;
+
+subject to pProtMinusDefinition{day in Days}:
+    pProtPlus >= reqProtein - sum{dish in Dishes, meal in Melas}(protein[dish] * amountToServe[dish, day, meal]);
