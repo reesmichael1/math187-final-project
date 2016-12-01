@@ -30,22 +30,22 @@ param:                      vegetarian  breakfast   lunch   dinner  snack   calo
 25ScrambledEggsWithChicken  2   1   1   1   1   140.751 9.941   3.413   0.076 7.3     488.701     88.861  1.62    56.85   4.505   805.223     11.355  5.361   0.905   1.646   1.347;
 
 
-param reqCalories := 2000;      #kcal
-param weightCalories := 1;
-param reqProtein := 80;         #grams
-param weightProtein := 10;
-param reqFiber := 25;           #grams
-param weightFiber := 10;
-param reqCarbs := 275;          #grams
-param weightCarbs := 1;
-param reqSodium := 3400;        #milligrams
-param weightSodium := 0.1;
-param reqFat := 65;             #grams
-param weightFat := 10;
-param reqSatFat := 16;          #grams
-param weightSatFat := 5;
-param reqUnsatFat := 51;        #grams
-param weightUnsatFat := 5;
+param reqCalories := 14000;      #kcal
+param weightCalories := 7;
+param reqProtein := 560;         #grams
+param weightProtein := 70;
+param reqFiber := 175;           #grams
+param weightFiber := 70;
+param reqCarbs := 1925;          #grams
+param weightCarbs := 7;
+param reqSodium := 2380;        #milligrams
+param weightSodium := 0.7;
+param reqFat := 465;             #grams
+param weightFat := 70;
+param reqSatFat := 112;          #grams
+param weightSatFat := 35;
+param reqUnsatFat := 357;        #grams
+param weightUnsatFat := 35;
 
-param MAX_SERVED := 2;
-param MAX_PER_DAY := 1;
+param MAX_SERVED := 3;
+param MAX_PER_DAY := 2;

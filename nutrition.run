@@ -1,6 +1,6 @@
 option solver cplex;
 option omit_zero_rows 1;
-option cplex_options 'mipgap=.05';
+option cplex_options 'mipgap=.01';
 
 model nutrition.mod;
 data nutrition.dat;

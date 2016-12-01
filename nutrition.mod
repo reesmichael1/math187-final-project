@@ -82,6 +82,12 @@ subject to BreakfastFoodForBreakfast{dish in Dishes, day in Days}:
 subject to DinnerFoodForDinner{dish in Dishes, day in Days}:
     amountToServe[dish, day, 'Dinner'] <= dinner[dish];
 
+subject to DailyCalorieRequirement{day in Days}:
+    sum{meal in Meals, dish in Dishes} amountToServe[dish, day, meal] * calories[dish] >= 0.75 * (reqCalories / 7);
+
+subject to NotTooMuchInOneMeal{day in Days, meal in Meals}:
+    sum{dish in Dishes} amountToServe[dish, day, meal] * calories[dish] <= 0.3 * (reqCalories / 7);
+
 subject to NoMoreThanMax{dish in Dishes}:
     sum{day in Days, meal in Meals} amountToServe[dish, day, meal] <= MAX_SERVED;
 
