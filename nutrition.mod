@@ -71,16 +71,16 @@ minimize Differences:
     + weightUnsatFat * (pUnsatFatPlus + pUnsatFatMinus) + weightSodium * (pSodPlus + pSodMinus);
 
 subject to SnackFoodForSnacks{dish in Dishes, day in Days}:
-    amountToServe[dish, day, 'Snack'] <= snack[dish];
+    amountToServe[dish, day, 'Snack'] <= MAX_PER_DAY * snack[dish];
 
 subject to LunchFoodForLunch{dish in Dishes, day in Days}:
-    amountToServe[dish, day, 'Lunch'] <= lunch[dish];
+    amountToServe[dish, day, 'Lunch'] <= MAX_PER_DAY * lunch[dish];
 
 subject to BreakfastFoodForBreakfast{dish in Dishes, day in Days}:
-    amountToServe[dish, day, 'Breakfast'] <= breakfast[dish];
+    amountToServe[dish, day, 'Breakfast'] <= MAX_PER_DAY * breakfast[dish];
 
 subject to DinnerFoodForDinner{dish in Dishes, day in Days}:
-    amountToServe[dish, day, 'Dinner'] <= dinner[dish];
+    amountToServe[dish, day, 'Dinner'] <= MAX_PER_DAY * dinner[dish];
 
 subject to DailyCalorieRequirement{day in Days}:
     sum{meal in Meals, dish in Dishes} amountToServe[dish, day, meal] * calories[dish] >= 0.75 * (reqCalories / 7);
