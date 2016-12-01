@@ -100,50 +100,50 @@ subject to ThreeMealsPerDay{day in Days, meal in Meals}:
 subject to FatDefinition{dish in Dishes, meal in Meals}:
     fat[dish] = satFat[dish] + unsatFat[dish];
 
-subject to pCalPlusDefinition{day in Days}:
-    pCalPlus >= sum{dish in Dishes, meal in Meals}(calories[dish] * amountToServe[dish, day, meal]) - reqCalories;
+subject to pCalPlusDefinition:
+    pCalPlus >= sum{dish in Dishes, meal in Meals, day in Days}(calories[dish] * amountToServe[dish, day, meal]) - reqCalories;
 
-subject to pCalMinusDefinition{day in Days}:
-    pCalMinus >= reqCalories - sum{dish in Dishes, meal in Meals}(calories[dish] * amountToServe[dish, day, meal]);
+subject to pCalMinusDefinition:
+    pCalMinus >= reqCalories - sum{dish in Dishes, meal in Meals, day in Days}(calories[dish] * amountToServe[dish, day, meal]);
 
-subject to pProtPlusDefinition{day in Days}:
-    pProtPlus >= sum{dish in Dishes, meal in Meals}(protein[dish] * amountToServe[dish, day, meal]) - reqProtein;
+subject to pProtPlusDefinition:
+    pProtPlus >= sum{dish in Dishes, meal in Meals, day in Days}(protein[dish] * amountToServe[dish, day, meal]) - reqProtein;
 
-subject to pProtMinusDefinition{day in Days}:
-    pProtPlus >= reqProtein - sum{dish in Dishes, meal in Meals}(protein[dish] * amountToServe[dish, day, meal]);
+subject to pProtMinusDefinition:
+    pProtPlus >= reqProtein - sum{dish in Dishes, meal in Meals, day in Days}(protein[dish] * amountToServe[dish, day, meal]);
 
-subject to pFibPlusDefinition{day in Days}:
-    pFibPlus >= sum{dish in Dishes, meal in Meals}(fiber[dish] * amountToServe[dish, day, meal]) - reqFiber;
+subject to pFibPlusDefinition:
+    pFibPlus >= sum{dish in Dishes, meal in Meals, day in Days}(fiber[dish] * amountToServe[dish, day, meal]) - reqFiber;
 
-subject to pFibMinusDefinition{day in Days}:
-    pFibMinus >= reqFiber - sum{dish in Dishes, meal in Meals}(fiber[dish] * amountToServe[dish, day, meal]);
+subject to pFibMinusDefinition:
+    pFibMinus >= reqFiber - sum{dish in Dishes, meal in Meals, day in Days}(fiber[dish] * amountToServe[dish, day, meal]);
 
-subject to pCarbsPlusDefinition{day in Days}:
-    pCarbsPlus >= sum{dish in Dishes, meal in Meals}(carbs[dish] * amountToServe[dish, day, meal]) - reqCarbs;
+subject to pCarbsPlusDefinition:
+    pCarbsPlus >= sum{dish in Dishes, meal in Meals, day in Days}(carbs[dish] * amountToServe[dish, day, meal]) - reqCarbs;
 
-subject to pCarbsMinusDefinition{day in Days}:
-    pCarbsMinus >= reqCarbs - sum{dish in Dishes, meal in Meals}(carbs[dish] * amountToServe[dish, day, meal]);
+subject to pCarbsMinusDefinition:
+    pCarbsMinus >= reqCarbs - sum{dish in Dishes, meal in Meals, day in Days}(carbs[dish] * amountToServe[dish, day, meal]);
 
-subject to pSodPlusDefinition{day in Days}:
-    pSodPlus >= sum{dish in Dishes, meal in Meals}(sodium[dish] * amountToServe[dish, day, meal]) - reqSodium;
+subject to pSodPlusDefinition:
+    pSodPlus >= sum{dish in Dishes, meal in Meals, day in Days}(sodium[dish] * amountToServe[dish, day, meal]) - reqSodium;
 
-subject to pSodMinusDefinition{day in Days}:
-    pSodMinus >= reqSodium - sum{dish in Dishes, meal in Meals}(sodium[dish] * amountToServe[dish, day, meal]);
+subject to pSodMinusDefinition:
+    pSodMinus >= reqSodium - sum{dish in Dishes, meal in Meals, day in Days}(sodium[dish] * amountToServe[dish, day, meal]);
 
-subject to pFatPlusDefinition{day in Days}:
-    pFatPlus >= sum{dish in Dishes, meal in Meals}(fat[dish] * amountToServe[dish, day, meal]) - reqFat;
+subject to pFatPlusDefinition:
+    pFatPlus >= sum{dish in Dishes, meal in Meals, day in Days}(fat[dish] * amountToServe[dish, day, meal]) - reqFat;
 
-subject to pFatMinusDefinition{day in Days}:
-    pFatMinus >= reqFat - sum{dish in Dishes, meal in Meals}(fat[dish] * amountToServe[dish, day, meal]);
+subject to pFatMinusDefinition:
+    pFatMinus >= reqFat - sum{dish in Dishes, meal in Meals, day in Days}(fat[dish] * amountToServe[dish, day, meal]);
 
-subject to pSatFatPlusDefinition{day in Days}:
-    pSatFatPlus >= sum{dish in Dishes, meal in Meals}(satFat[dish] * amountToServe[dish, day, meal]) - reqSatFat;
+subject to pSatFatPlusDefinition:
+    pSatFatPlus >= sum{dish in Dishes, meal in Meals, day in Days}(satFat[dish] * amountToServe[dish, day, meal]) - reqSatFat;
 
-subject to pSatFatMinusDefinition{day in Days}:
-    pSatFatMinus >= reqSatFat - sum{dish in Dishes, meal in Meals}(satFat[dish] * amountToServe[dish, day, meal]);
+subject to pSatFatMinusDefinition:
+    pSatFatMinus >= reqSatFat - sum{dish in Dishes, meal in Meals, day in Days}(satFat[dish] * amountToServe[dish, day, meal]);
 
-subject to pUnsatFatPlusDefinition{day in Days}:
-    pUnsatFatPlus >= sum{dish in Dishes, meal in Meals}(unsatFat[dish] * amountToServe[dish, day, meal]) - reqUnsatFat;
+subject to pUnsatFatPlusDefinition:
+    pUnsatFatPlus >= sum{dish in Dishes, meal in Meals, day in Days}(unsatFat[dish] * amountToServe[dish, day, meal]) - reqUnsatFat;
 
-subject to pUnsatFatMinusDefinition{day in Days}:
-    pUnsatFatMinus >= reqUnsatFat - sum{dish in Dishes, meal in Meals}(unsatFat[dish] * amountToServe[dish, day, meal]);
+subject to pUnsatFatMinusDefinition:
+    pUnsatFatMinus >= reqUnsatFat - sum{dish in Dishes, meal in Meals, day in Days}(unsatFat[dish] * amountToServe[dish, day, meal]);
