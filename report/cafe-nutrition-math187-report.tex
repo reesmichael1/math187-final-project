@@ -126,7 +126,7 @@ We defined four sets.
 \subsubsection{Parameters}
 \textbf{Nutritional Contents}\\[.1in]
 \noindent
-Our parameters were mostly the nutrition facts that we have already discussed. We let $d_n$ represent the content of Nutrient $n$ in Dish $d$.
+Our parameters were mostly the nutrition facts that we have already discussed. We let $s_n$ represent the content of Nutrient $n$ in Dish $s$.
 
 These parameters took on various units, such as milligrams vs. grams, so we had to be careful balancing these units as we went through the project.\\[.1in]
 \textbf{Nutritional Goals}\\[.1in]
@@ -138,7 +138,7 @@ Each pair of slack decision variables has different units than the others, which
 
 The ``penalty points'' in this calculation are related to the client. If a client needs to be strict about a low sugar intake, the nutritionist may multiply his penalty by a higher number.\\[.1in]
 \textbf{Meal Types}\\[.1in]
-We also characterized each Dish $d$ as a breakfast, lunch, dinner, or snack meal. To do this, we introduced four parameters: $B_d$, $L_d$, $D_d$, and $S_d$. Each of these is $0$ if the corresponding Dish cannot be eaten at breakfast, lunch, dinner, or as a snack, respectively, and $1$ otherwise.\\[.1in]
+We also characterized each Dish $s$ as a breakfast, lunch, dinner, or snack meal. To do this, we introduced four parameters: $B_s$, $L_s$, $D_s$, and $S_s$. Each of these is $0$ if the corresponding Dish cannot be eaten at breakfast, lunch, dinner, or as a snack, respectively, and $1$ otherwise.\\[.1in]
 \textbf{Variety Parameters}\\[.1in]
 To ensure that the model does not choose one meal and one meal only to serve, we let $M_D$ be the maximum number of times that a single meal can be served in a single day and let $M_W$ be the maximum number of times that a single meal can be served over the course of a week.
 
@@ -155,10 +155,10 @@ Of course, we require that all of the amounts served should be non-negative.\\[.
 
 We then included constraints saying that, for each nutrition item,the ``positive'' variable had to be greater than the difference between the sum of the amount served of each dish in each meal on each day multiplied by the amount of that nutrition fact in that dish. The reverse of this was true for the ``negative'' variable.
 
-Symbolically, considering the nutrition item Protein indexed as $p$, we set
+Symbolically, considering the nutrition item Protein as an example, we set
 \begin{equation*}
-    p_+ \geq \thinspace\smashoperator{\sum_{s \in \text{ Dishes } \atop {m \in \text{ Meals } \atop d \in \text{ Days }}}}\thinspace\del{p_s * a_{jdm}} - R_p \quad \text{and} \quad
-    p_- \geq  R_p - \thinspace\smashoperator{\sum_{s \in \text{ Dishes } \atop {m \in \text{ Meals } \atop d \in \text{ Days }}}}\thinspace \del{p_s * a_{jdm}}
+    p_+ \geq \thinspace\smashoperator{\sum_{s \in \text{ Dishes } \atop {m \in \text{ Meals } \atop d \in \text{ Days }}}}\thinspace\del{p_s * a_{sdm}} - m_p \quad \text{and} \quad
+    p_- \geq  m_p - \thinspace\smashoperator{\sum_{s \in \text{ Dishes } \atop {m \in \text{ Meals } \atop d \in \text{ Days }}}}\thinspace \del{p_s * a_{sdm}}
 \end{equation*}
 
 We repeat this process for each nutrition item.
@@ -166,7 +166,7 @@ We repeat this process for each nutrition item.
 Again, we require that all of these variables be non-negative.
 
 \subsubsection{Objective Function}
-Within the objective function, we set weights, $c_n$, for each nutrition item $n$. These weights are multiplied by the difference between depending upon the client's individual goals. For example, if someone wanted to lose weight, they would have a higher weight on the calorie value, while an athelete would have a higher weight on the protein value.
+Within the objective function, we set weights $w_n$ for each nutrition item $n$. These weights are multiplied by the difference between depending upon the client's individual goals. For example, if someone wanted to lose weight, they would have a higher weight on the calorie value, while an athelete would have a higher weight on the protein value.
 
 Putting all of this together, our objective function is
 \begin{equation*}
@@ -180,7 +180,7 @@ In addition to the constraints mentioned in \Cref{sec:slack}, we defined several
 \textbf{Meal Type Constraints}\\[.1in]
 We require that only Dishes of the appropriate type be eaten at each meal (and that no more than one can eat in a whole day be served at that meal). Mathematically,
 \begin{equation*}
-    a_{idm} \leq M_D \cdot \cbr{B_i, L_i, D_i, S_i} \qquad \text{for all } i \in \text{Dishes}, d \in \text{Days}, m \in \text{Meals}.
+    a_{sdm} \leq M_D \cdot \cbr{B_s, L_s, D_s, S_s} \qquad \text{for all } s \in \text{Dishes}, d \in \text{Days}, m \in \text{Meals}.
 \end{equation*}
 \textbf{Meal Size Constraints}\\[.1in]
 We wanted to ensure that the client is eating reasonably sized meals daily throughout the course of the week, so we added one constraint requiring that no more than some portion of the daily calorie intake could be obtained in a single meal (here, we set that portion to $0.3$, but that could be changed). Mathematically,
@@ -195,11 +195,11 @@ Note that in both equations, the weekly recommended calorie intake $m_c$ is divi
 \textbf{Meal Variety Constraints}\\[.1in]
 We want to ensure that several meals are scheduled throughout the week, and that meals generally consist of multiple food items. To do this, we simply required that the sum of all times a meal is served in a day and a week is less than some maximum value. Mathematically,
 \begin{equation*}
-    \sum_{d \in \text{ Days } \atop m \in \text{ Meals }} a_{idm} \leq M_W \qquad \text{for all } i \in \text{Dishes}.
+    \sum_{d \in \text{ Days } \atop m \in \text{ Meals }} a_{sdm} \leq M_W \qquad \text{for all } s \in \text{Dishes}.
 \end{equation*}
 and
 \begin{equation*}
-    \sum_{m \in \text{ Meals }} a_{idm} \leq M_D \qquad \text{for all } i \in \text{Dishes}, d \in \text{Days}.
+    \sum_{m \in \text{ Meals }} a_{sdm} \leq M_D \qquad \text{for all } s \in \text{Dishes}, d \in \text{Days}.
 \end{equation*}
 
 \begin{center}
