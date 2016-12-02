@@ -1,0 +1,303 @@
+\documentclass[twoside]{article}
+
+\usepackage[full]{textcomp}
+\usepackage{titleps}
+\usepackage{newpxtext}
+\usepackage{newpxmath}
+\usepackage{sourcesanspro}
+\usepackage{commath}
+\usepackage{mathtools}
+\usepackage{xspace}
+\usepackage{dblfloatfix}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+\newpagestyle{main}{
+    \setheadrule{.4pt}
+    \sethead[\subsectiontitle]
+            []
+            [\textbf{\sectiontitle}]
+            {\textbf{\sectiontitle}}
+            {}
+            {\subsectiontitle}
+    \setfoot{}{\thepage}{}
+}
+
+\pagestyle{empty}
+
+\newcommand{\cn}{Caf\'e Nutrition\xspace}
+\newcommand{\codeformat}[1]{\texttt{#1}}
+\newcommand{\AMPL}{\codeformat{AMPL}\xspace}
+
+\renewcommand{\arraystretch}{1.2}
+
+\title{Using Integer Programming to Formulate Nutrition Plans}
+\author{Richard Liu \and Raunak Pednekar \and Michael Rees}
+\date{\parbox{\linewidth}{\centering 2 December 2016\endgraf\bigskip\bigskip\bigskip\it\small This document submitted in partial fulfillment of the requirements for passing MATH187:~Introduction~to~Operations~Research.}}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\newpage\phantom{bla}
+\newpage\phantom{bla}
+\begin{abstract}
+    We have developed an integer program to construct meal plans for clients of \cn, a private nutrition consulting company based in Mumbai. These plans suggest what portions of different food items should be eaten for what meals over the course of a week to ensure that clients meet their personalized nutrition goals. Here, we provide an overview of the model formulation and give results. We hope that this model will be useful for \cn by automating much of the work they must currently perform manually.
+\end{abstract}
+\newpage\phantom{bla}
+\newpage\phantom{bla}
+\pagestyle{main}
+\section{Executive Summary}
+\label{sec:summary}
+\subsection{Stakeholders}
+\cn is a private nutrition consulting company in Mumbai, India. They work with a variety of clients with widely ranging goals, including sports nutrition (designing diets for athletes to ensure they can recover from training and meet their energy demands), child nutrition (designing diets for children at different growth stages), and corporate nutrition (working with companies to help their employees develop a better diet to increase productivity).
+
+Individual clients come to \cn with some criteria they would like to meet, such as weight loss or preparing to run a triathalon. \cn then prepares a specific set of targets for each ``nutrition fact'' (for example, calories or protein) that the client should strive to meet. Finally, they prepare a meal plan that is delivered to the client. These plans include a general schedule of what foods the client should eat over the course of some time period.
+\subsection{Project Scope}
+When done by hand, constructing these eating plans is labor intensive and time consuming. It is difficult to ensure that the designed meal plan is the best possible plan in terms of acutally meeting any one client's goals.
+
+In this paper, we propose a method of automating this process. The model we have developed accepts a set of nutrition facts about a variety of possible foods and then develops a list of recommended meals (broken into breakfast, lunch, dinner, and a daily snack) over the course of a week. These meals consist of some collection of either one or two portions of each of the listed food items.
+
+The recommended meals are chosen in a way that minimizes the total difference between the actual nutritional contents of the eaten foods and the nutritional goals that have been set for the client. We have also taken steps to ensure that several conditions to ensure a variety of meals for the client. These include
+\begin{enumerate}
+    \item A food item can only be eaten at most three times in a single week.
+    \item A food item can only be eaten at most two times in a single day.
+    \item No one meal can account for more than 30\% of the daily calorie count.
+    \item At least 75\% of the daily calorie requirement must be met every day.
+\end{enumerate}
+
+Meal plans that meet these requirements while minimizing the difference between the client's goals and what the client will actually eat can be constructed in just a few seconds by a computer, which is highly preferable to developing a plan manually. Therefore, we are confident that our results will be highly valuable for \cn.
+
+A sample output from our model can be found in \Cref{tab:sample-result}. This table shows the recommended dinners over the course of a week. A table showing the results for all meals across the week can be found in \Cref{tab:full-results}.
+
+\begin{table*}[b!]
+    \centering
+    \begin{tabular}{r|l}
+        \textbf{Day} & \textbf{Food Items}\\
+        \hline
+        Sunday & Mixed Vegetables with Paneer | Palak Paneer\\
+        Monday & Chicken Pesto Pasta | Chicken Kheema Paratha\\
+        Tuesday & Green Peas Paratha | Nargisi Vegetable\\
+        & Chicken Cutlet Sandwich\\
+        Wednesday & Herbed Rice (2)\\
+        Thursday & Cucumber Soya Pancakes (2)\\
+        & Mixed Vegetables with Paneer (2)\\
+        & Dal Khichadi with Vegetables\\
+        Friday & Nargisi Vegetable (2)\\
+        Saturday & Chicken Pesto Pasta (2)
+    \end{tabular}
+    \caption{A sample dinner plan from our model. If the portion size is not 1, then it is shown next to the food item in parentheses.}
+    \label{tab:sample-result}
+\end{table*}
+\clearpage
+
+\section{Technical Report}
+\subsection{Introduction}
+\label{sec:report-intro}
+We have developed an integer program (described in more depth in \Cref{sec:model-formulation}) to develop meal plans for \cn as described in \Cref{sec:summary}. We have solved this program using \AMPL with the \codeformat{CPLEX} solver.
+
+To be able to run this model in any sensible way, we needed to collect data on the various food items we considered. We did this through access to \cn's setup on NutritionPro, commercial software that generate nutrition information for food. \cn sent us the output files for 25 different foods they thought would be useful for us to consider. (A full list of foods can be found in \Cref{sec:food-list}.)
+
+We had to sanitize this information so it could be used by \AMPL. Doing so was rather tricky, as the output from NutritionPro was inconsistent. Because of this, we were concerned that we introduced error into certain fields, most notably the vitamin A, B, and K contents and the calcium content of the various foods. Due to this concern, we did not incorporate these vitamin and calcium values into our calculations.
+
+After removing these values, we were left with the following nutrition facts to try to balance:
+\begin{itemize}
+    \item Calories
+    \item Protein
+    \item Fiber
+    \item Carbohydrates
+    \item Fat
+    \item Saturated fat
+    \item Unsaturated fat
+    \item Sodium
+\end{itemize}
+
+We received goals from \cn for some hypothetical customer for each of these items. Then, we passed all of this input to our model.
+\subsection{Model Formulation}
+\label{sec:model-formulation}
+\subsubsection{Sets}
+We defined four sets.
+\begin{itemize}
+    \item Dishes: all of the dishes listed in \Cref{sec:food-list}
+    \item Meals: ``Breakfast,'' ``Lunch,'' ``Dinner,'' and ``Snack''
+    \item Days: the days of the week
+    \item Nutrient: the nutrition facts listed in \Cref{sec:report-intro}
+\end{itemize}
+
+\subsubsection{Parameters}
+\textbf{Nutritional Contents}\\[.1in]
+\noindent
+Our parameters were mostly the nutrition facts that we have already discussed. We let $d_n$ represent the content of Nutrient $n$ in Dish $d$.
+
+These parameters took on various units, such as milligrams vs. grams, so we had to be careful balancing these units as we went through the project.\\[.1in]
+\textbf{Nutritional Goals}\\[.1in]
+\noindent For each Nutrient $n$, \cn constructs a goal for its client to meet. For each Nutrient $n$, we denote that target as $m_n$.\\[.1in]
+\textbf{Penalty Multipliers}\\[.1in]
+\noindent Penalty multipliers multiply each the slack decision variable (described in \Cref{sec:slack}) to share the same units while penalizing the excess of defecit of a nutrient. We let $w_n$ represent the penalty multiplier for each Nutrient $n$.
+
+Each pair of slack decision variables has different units than the others, which makes it illogical to sum them up. To mediate this problem, we created a penalty multiplier for each nutrient with the unit ``penalty points per unit of~$n$.''
+
+The ``penalty points'' in this calculation are related to the client. If a client needs to be strict about a low sugar intake, the nutritionist may multiply his penalty by a higher number.\\[.1in]
+\textbf{Meal Types}\\[.1in]
+We also characterized each Dish $d$ as a breakfast, lunch, dinner, or snack meal. To do this, we introduced four parameters: $B_d$, $L_d$, $D_d$, and $S_d$. Each of these is $0$ if the corresponding Dish cannot be eaten at breakfast, lunch, dinner, or as a snack, respectively, and $1$ otherwise.\\[.1in]
+\textbf{Variety Parameters}\\[.1in]
+To ensure that the model does not choose one meal and one meal only to serve, we let $M_D$ be the maximum number of times that a single meal can be served in a single day and let $M_W$ be the maximum number of times that a single meal can be served over the course of a week.
+
+\subsubsection{Decision Variables}
+\textbf{Amount to Serve}\\[.1in]
+\noindent Our main decision variable was the amount to serve, say $a_{sdm}$, of Dish $s$ on Day $d$'s Meal $m$. We declare this variable as integer, since we want to serve integer portions of each food item.
+
+In addition to this ``useful'' decision variable, to make our objective function work, we needed to define auxiliary decision variables as described below.
+
+Of course, we require that all of the amounts served should be non-negative.\\[.1in]
+\textbf{Slack Variables}\\[.1in]
+\label{sec:slack}
+\noindent Our objective function was to minimize the total absolute difference between the client's intake and the target intake for each individual nutrition item. To do this while working with the non-linearity of the absolute value function, we defined a ``positive'' and a ``negative'' decision variable for each nutrition item. 
+
+We then included constraints saying that, for each nutrition item,the ``positive'' variable had to be greater than the difference between the sum of the amount served of each dish in each meal on each day multiplied by the amount of that nutrition fact in that dish. The reverse of this was true for the ``negative'' variable.
+
+Symbolically, considering the nutrition item Protein indexed as $p$, we set
+\begin{equation*}
+    p_+ \geq \thinspace\smashoperator{\sum_{s \in \text{ Dishes } \atop {m \in \text{ Meals } \atop d \in \text{ Days }}}}\thinspace\del{p_s * a_{jdm}} - R_p \quad \text{and} \quad
+    p_- \geq  R_p - \thinspace\smashoperator{\sum_{s \in \text{ Dishes } \atop {m \in \text{ Meals } \atop d \in \text{ Days }}}}\thinspace \del{p_s * a_{jdm}}
+\end{equation*}
+
+We repeat this process for each nutrition item.
+
+Again, we require that all of these variables be non-negative.
+
+\subsubsection{Objective Function}
+Within the objective function, we set weights, $c_n$, for each nutrition item $n$. These weights are multiplied by the difference between depending upon the client's individual goals. For example, if someone wanted to lose weight, they would have a higher weight on the calorie value, while an athelete would have a higher weight on the protein value.
+
+Putting all of this together, our objective function is
+\begin{equation*}
+    \min\thinspace \smashoperator{\sum_{n \in \text{ Nutrients }}}\thinspace w_n \del{n_+ + n_-}.
+\end{equation*}
+
+We want to minimize this sum because we want the total difference between what the client eats and what the client wants to eat to be as small as possible.
+
+\subsubsection{Constraints}
+In addition to the constraints mentioned in \Cref{sec:slack}, we defined several constraints to ensure variety in the client's diet. Otherwise, we were concerned that our model would have settled on a single nutritious food item and recommended eating only it for the entire week.\\[.1in]
+\textbf{Meal Type Constraints}\\[.1in]
+We require that only Dishes of the appropriate type be eaten at each meal (and that no more than one can eat in a whole day be served at that meal). Mathematically,
+\begin{equation*}
+    a_{idm} \leq M_D \cdot \cbr{B_i, L_i, D_i, S_i} \qquad \text{for all } i \in \text{Dishes}, d \in \text{Days}, m \in \text{Meals}.
+\end{equation*}
+\textbf{Meal Size Constraints}\\[.1in]
+We wanted to ensure that the client is eating reasonably sized meals daily throughout the course of the week, so we added one constraint requiring that no more than some portion of the daily calorie intake could be obtained in a single meal (here, we set that portion to $0.3$, but that could be changed). Mathematically,
+\begin{equation*}
+    \smashoperator[r]{\sum_{i \in \text{ Dishes }}}\thinspace a_{idm} \cdot c_d \leq 0.3 \cdot \del{\dfrac 17 m_c} \qquad \text{for all } d \in \text{Days}, m \in \text{Meals}.
+\end{equation*}
+We also added another constraint requiring that at least some portion of the daily calorie intake be met each day (here, we set that portion to $0.75$). Mathematically,
+\begin{equation*}
+    \smashoperator[r]{\sum_{m \in \text{ Meals } \atop i \in \text{ Dishes }}}\thinspace a_{idm} \cdot c_d \geq 0.75 \cdot \del{\dfrac 17 m_c} \qquad \text{for all } m \in \text{Meals}.
+\end{equation*}
+Note that in both equations, the weekly recommended calorie intake $m_c$ is divided by seven to convert to a daily intake.\\[.1in]
+\textbf{Meal Variety Constraints}\\[.1in]
+We want to ensure that several meals are scheduled throughout the week, and that meals generally consist of multiple food items. To do this, we simply required that the sum of all times a meal is served in a day and a week is less than some maximum value. Mathematically,
+\begin{equation*}
+    \sum_{d \in \text{ Days } \atop m \in \text{ Meals }} a_{idm} \leq M_W \qquad \text{for all } i \in \text{Dishes}.
+\end{equation*}
+and
+\begin{equation*}
+    \sum_{m \in \text{ Meals }} a_{idm} \leq M_D \qquad \text{for all } i \in \text{Dishes}, d \in \text{Days}.
+\end{equation*}
+
+\begin{center}
+    \rule{0.8\textwidth}{0.4pt}
+\end{center}
+
+The development of these constraints was the most dramatic series of iterations in this model. Initially, only the constraints characterized here as ``Meal Variety Constraints'' were included. However, this only gave us a single set of suggested meals. We thought that it would be more useful to create a fully fledged meal plan, so we added the \emph{Days} set and added ``Meal Type Constraints'' to only eat certain types of meals at different times of the day.
+
+These constraints gave large meals on some days and very small meals on other days. We felt that this went against \cn's goal of establishing balanced meals throughout the course of the week, so we then added in ``Meal Size Constraints.''
+
+\subsection{Results}
+As an integer program, this formulation takes an indefinitely long amount of time to be solved by \AMPL. Therefore, we decided to use an optimality gap as briefly discussed in class. Setting this gap to even relatively low numbers such as 1\% allows the model to be solved very quickly (on the timeframe of a single second). We feel that using this optimality gap is perfectly acceptable in this case, because being even within 1\% of optimality is almost certainly better than what \cn is able to achieve by hand.
+
+The entire results for a proposed week long meal schedule are shown in \Cref{tab:full-results}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{rr|l}
+        \textbf{Day} & \textbf{Meal} & \textbf{Food}\\
+        \hline
+        Sunday & \textit{Breakfast} & Cucumber Soya Pancakes | Aloo Paratha\\
+        & \textit{Lunch} & Paneer and Corn Burger (2)\\
+        & \textit{Snack} & Methi Thepla (2) | Chicken Cutlet Sandwich\\
+        & \textit{Dinner} & Mixed Vegetables with Paneer | Palak Paneer\\
+        Monday & \textit{Breakfast} & Boiled Egg Mayo Sandwich\\
+        & \textit{Lunch} & Aloo Paratha (2)\\
+        & \textit{Snack} & Chicken Cutlet Sandwich | Chicken Frankie \\
+        & \textit{Dinner} & Chicken Pesto Pasta | Chicken Kheema Paratha\\
+        Tuesday & \textit{Breakfast} & Broccoli Paratha (2)\\
+        & \textit{Lunch} & Green Peas Paratha\\
+        & & Paneer and Cucumber Sandwich\\
+        & \textit{Snack} & Scrambled Eggs with Chicken (2)\\
+        & \textit{Dinner} & Green Peas Paratha | Nargisi Vegetable\\ 
+        & & Chicken Cutlet Sandwich\\
+        Wednesday & \textit{Breakfast} & Egg Bhurjee Sandwich | Cheese Egg Omelette (2)\\
+        & \textit{Lunch} & Dal Khichadi with Vegetables (2)\\
+        & & Chicken Kheema Paratha (2)\\
+        & \textit{Snack} & Methi Thepla | Chicken Frankie (2)\\
+        & \textit{Dinner} & Herbed Rice (2)\\
+        Thursday & \textit{Breakfast} & Cheese Egg Omelette\\
+        & \textit{Lunch} & Herbed Rice | Palak and Corn\\
+        & & Chicken Fried Rice (2)\\
+        & \textit{Snack} & Egg Bhurjee Sandwich | Broccoli Paratha\\
+        & \textit{Dinner} & Chicken Pesto Pasta (2)\\
+        Friday & \textit{Breakfast} & Green Peas Paratha | Boiled Egg Mayo Sandwich\\
+        & \textit{Lunch} & Paneer and Corn Burger | Chicken Frid Rice\\
+        & \textit{Snack} & Paneer and Cucumber Sandwich (2)\\
+        & \textit{Dinner} & Nargisi Vegetable (2)\\
+        Saturday & \textit{Breakfast} & Boiled Egg Mayo Sandwich\\
+        & \textit{Lunch} & Palak and Corn (2)\\
+        & \textit{Snack} & Egg Bhurjee Sandwich\\
+        & \textit{Dinner} & Chicken Pesto Pasta (2)
+    \end{tabular}
+    \caption{The full results from our model. If the portion size is not $1$, it is shown in parentheses next to the food item.}
+    \label{tab:full-results}
+\end{table}
+
+\AMPL outputs that the objective function value is $43264.6$, and that its upper bound for the optimal objective function value is about $43640$. However, it is unfortunately difficult to extract any useful information from this, since the slack variables described in \Cref{sec:slack} are normalized to be unitless.
+
+\subsection{Conclusions and Recommendations}
+The sample result shown in this paper may not be terribly useful by itself. However, we believe that this formulation can be extremely useful for \cn. We have intentionally designed this model so that it is easy to modify for individual clients, so that it can be tweaked to run with a different purpose (such as maximizing weight loss vs. maintaining muscle mass).
+
+At the same time, we see many ways in which work on this model could be continued. We would like to develop and test multiple objective functions, so that instead of minimizing the absolute difference between nutritional contents, we could minimize preparation time or some other goal proposed by a client.
+
+Another area that we could modify is the constraints. Right now, the chronology of the days of the week is not taken into consideration in any way. From a client's point of view, it would be nice to schedule meals with the same food items near each other so that leftovers could easily be kept and the meal would only have to be prepared once. This could be done by adding a few more constraints forcing 
+
+We could also add food preferences to this model by asking clients to rank the food items in some way. We could then use this to decide what meals should be favored and repeated over others if necessary.
+
+On the whole, however, we believe that this model is a major step forward for \cn, because it will drastically speed up a routine task for the company: developing these meal plans for their clients. Previously, \cn employees were forced to calculate goals and then schedule the type of meal plan that our model now outputs by hand, but the same results can be obtained by our model nearly instantaneously. This will allow them to serve more clients and obtain better results from those cases.
+\newpage
+\appendix
+\section{Food List}
+\label{sec:food-list}
+\begin{itemize}
+    \item Aloo Paratha
+    \item Boiled Egg Mayo Sandwich
+    \item Broccoli Paratha
+    \item Cheese Egg Omelette
+    \item Chicken Cutlet Sandwich
+    \item Chicken Frankie
+    \item Chicken Fried Rice
+    \item Chicken Kheema Paratha
+    \item Chicken Pesto Pasta
+    \item Cucumber Soya Pancakes
+    \item Dal Khichadi with Vegetables
+    \item Egg Bhurjee Sandwich
+    \item Egg Oats Upma
+    \item Green Peas Paratha
+    \item Herbed Rice
+    \item Mattar Mushroom
+    \item Methi Thepla
+    \item Mixed Vegetables with Paneer
+    \item Nargisi Vegetable
+    \item Palak and Corn
+    \item Palak Paneer
+    \item Peneer and Corn Burger
+    \item Paneer and Cucumber Sandwich
+    \item Scrambled Eggs with Chicken
+    \item Vegetable Thai Curry
+\end{itemize}
+\end{document}
