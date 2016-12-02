@@ -1,0 +1,48 @@
+amountToServe [*,*,Breakfast]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+11CucumberSoyaPancakes        0   0   0   0   0    0   2
+13EggBhurjeeSandwich          1   0   0   0   1    0   0
+15GreenPeasParatha            0   0   0   0   1    2   0
+2AlooParatha                  0   0   0   2   0    0   0
+3BoiledEggMayoSandwich        0   1   0   0   0    0   0
+4BroccoliParatha              0   1   0   0   0    0   0
+5CheeseEggOmelette            1   0   2   0   0    0   0
+
+ [*,*,Dinner]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+12DalKhichadiWithVegetables   0   0   1   0   0    0   0
+16HerbedRice                  0   1   0   0   0    0   0
+18MethiThepla                 0   0   0   0   0    1   0
+19MixedVegetablesWithPaneer   0   2   0   0   0    0   0
+20NargisiVegetable            0   0   2   0   0    1   0
+21PalakAndCorn                0   1   0   0   0    0   1
+24PaneerAndCubumberSandwich   0   0   0   0   2    0   0
+25ScrambledEggsWithChicken    2   0   0   0   0    0   0
+2AlooParatha                  1   0   0   0   0    0   0
+4BroccoliParatha              0   0   2   0   0    0   0
+6ChickenCutletSandwich        0   0   0   1   0    0   0
+8ChickenFriedRice             0   0   0   0   0    2   1
+
+ [*,*,Lunch]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+10ChickenPestoPasta           0   1   2   0   0    0   0
+11CucumberSoyaPancakes        0   1   0   0   0    0   0
+12DalKhichadiWithVegetables   0   0   0   1   0    1   0
+16HerbedRice                  0   0   0   0   2    0   0
+18MethiThepla                 0   0   0   0   2    0   0
+19MixedVegetablesWithPaneer   1   0   0   0   0    0   0
+21PalakAndCorn                1   0   0   0   0    0   0
+23PaneerAndCornBurger         0   0   0   1   0    0   0
+24PaneerAndCubumberSandwich   0   0   0   0   0    1   0
+3BoiledEggMayoSandwich        0   0   0   0   0    0   1
+9ChickenKheemaParatha         0   0   0   0   1    0   2
+
+ [*,*,Snack]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+13EggBhurjeeSandwich          0   0   0   0   0    1   0
+23PaneerAndCornBurger         0   0   0   0   0    0   2
+3BoiledEggMayoSandwich        0   1   0   0   0    0   0
+6ChickenCutletSandwich        1   0   0   1   0    0   0
+7ChickenFrankie               0   0   1   0   2    0   0
+;
+

@@ -1,0 +1,44 @@
+amountToServe [*,*,Breakfast]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+11CucumberSoyaPancakes        1   0   0   0   0    0   0
+13EggBhurjeeSandwich          0   1   1   1   0    0   0
+15GreenPeasParatha            0   0   0   0   0    1   0
+25ScrambledEggsWithChicken    0   0   0   0   0    1   0
+3BoiledEggMayoSandwich        0   0   0   0   1    0   1
+4BroccoliParatha              0   0   2   0   0    0   0
+5CheeseEggOmelette            0   0   0   2   1    0   0
+
+ [*,*,Dinner]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+10ChickenPestoPasta           0   1   0   0   0    0   2
+12DalKhichadiWithVegetables   0   0   0   0   2    0   0
+15GreenPeasParatha            0   0   1   0   0    0   0
+16HerbedRice                  0   0   0   2   0    0   0
+19MixedVegetablesWithPaneer   1   0   0   0   2    0   0
+20NargisiVegetable            0   0   1   0   2    0   0
+23PaneerAndCornBurger         0   1   0   0   0    2   0
+6ChickenCutletSandwich        1   0   1   0   0    0   0
+
+ [*,*,Lunch]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+11CucumberSoyaPancakes        0   0   0   2   0    0   0
+12DalKhichadiWithVegetables   1   0   0   0   0    0   0
+15GreenPeasParatha            0   0   1   0   0    0   0
+16HerbedRice                  0   0   0   0   1    0   0
+21PalakAndCorn                1   0   0   0   0    0   2
+2AlooParatha                  0   2   0   0   0    0   0
+4BroccoliParatha              0   0   0   0   0    1   0
+8ChickenFriedRice             0   0   0   0   2    1   0
+9ChickenKheemaParatha         0   0   0   2   0    0   0
+
+ [*,*,Snack]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+18MethiThepla                 2   0   0   1   0    0   0
+24PaneerAndCubumberSandwich   0   1   0   0   0    2   0
+25ScrambledEggsWithChicken    0   0   2   0   0    0   0
+2AlooParatha                  0   0   0   0   0    0   1
+3BoiledEggMayoSandwich        0   0   0   0   1    0   0
+6ChickenCutletSandwich        1   0   0   0   0    0   0
+7ChickenFrankie               0   1   0   2   0    0   0
+;
+

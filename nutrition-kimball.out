@@ -1,0 +1,50 @@
+amountToServe [*,*,Breakfast]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+11CucumberSoyaPancakes        0   0   2   0   0    0   0
+13EggBhurjeeSandwich          1   0   0   0   1    0   0
+15GreenPeasParatha            0   0   1   0   0    0   0
+25ScrambledEggsWithChicken    0   0   0   0   0    0   2
+3BoiledEggMayoSandwich        0   1   0   0   0    1   0
+5CheeseEggOmelette            0   0   0   2   0    0   1
+
+ [*,*,Dinner]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+10ChickenPestoPasta           0   0   0   0   1    0   0
+16HerbedRice                  0   2   0   0   0    0   0
+17MattarMushroom              0   2   0   0   0    0   0
+18MethiThepla                 0   0   0   1   0    0   0
+19MixedVegetablesWithPaneer   1   0   0   0   0    0   0
+21PalakAndCorn                1   0   0   0   0    0   1
+22PalakPaneer                 0   0   0   0   1    0   1
+25ScrambledEggsWithChicken    0   0   0   0   0    1   0
+3BoiledEggMayoSandwich        0   0   1   0   0    0   0
+7ChickenFrankie               0   0   0   0   0    1   0
+8ChickenFriedRice             0   0   0   2   0    0   0
+9ChickenKheemaParatha         0   2   0   0   0    0   0
+
+ [*,*,Lunch]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+10ChickenPestoPasta           0   0   1   0   0    0   0
+15GreenPeasParatha            0   0   0   0   2    0   0
+16HerbedRice                  0   0   0   0   1    0   0
+17MattarMushroom              0   0   0   0   0    0   1
+18MethiThepla                 0   0   0   1   0    0   1
+19MixedVegetablesWithPaneer   0   2   0   0   0    0   0
+20NargisiVegetable            0   0   1   2   0    0   0
+21PalakAndCorn                0   1   0   0   0    0   0
+22PalakPaneer                 0   0   0   1   0    0   0
+2AlooParatha                  0   0   0   0   0    2   0
+6ChickenCutletSandwich        1   0   0   0   0    0   0
+8ChickenFriedRice             0   0   0   0   0    0   1
+9ChickenKheemaParatha         0   0   0   0   0    1   0
+
+ [*,*,Snack]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+10ChickenPestoPasta           0   0   0   0   1    0   0
+11CucumberSoyaPancakes        0   0   0   0   0    1   0
+13EggBhurjeeSandwich          0   0   0   0   0    0   1
+24PaneerAndCubumberSandwich   0   1   0   0   0    0   0
+6ChickenCutletSandwich        0   0   1   1   0    0   0
+7ChickenFrankie               1   0   0   0   0    1   0
+;
+

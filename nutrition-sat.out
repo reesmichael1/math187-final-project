@@ -1,0 +1,48 @@
+amountToServe [*,*,Breakfast]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+13EggBhurjeeSandwich          0   0   1   1   1    0   0
+15GreenPeasParatha            0   0   0   0   0    1   1
+2AlooParatha                  1   0   0   0   0    2   0
+3BoiledEggMayoSandwich        0   1   0   0   0    0   0
+4BroccoliParatha              2   0   0   0   0    0   0
+5CheeseEggOmelette            1   0   0   0   0    0   2
+
+ [*,*,Dinner]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+12DalKhichadiWithVegetables   0   1   0   0   2    0   0
+16HerbedRice                  2   0   0   1   0    0   0
+19MixedVegetablesWithPaneer   0   0   0   0   0    0   2
+20NargisiVegetable            0   0   0   0   1    0   0
+22PalakPaneer                 0   0   0   0   0    0   1
+23PaneerAndCornBurger         0   0   0   0   0    2   0
+24PaneerAndCubumberSandwich   1   0   0   0   0    0   0
+4BroccoliParatha              0   0   1   0   0    0   0
+6ChickenCutletSandwich        0   0   1   0   0    0   0
+7ChickenFrankie               0   0   0   0   0    0   2
+8ChickenFriedRice             0   0   0   0   2    0   0
+9ChickenKheemaParatha         0   0   0   1   0    0   0
+
+ [*,*,Lunch]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+10ChickenPestoPasta           0   0   0   0   0    1   0
+11CucumberSoyaPancakes        0   0   0   2   0    0   0
+15GreenPeasParatha            0   0   1   0   0    0   0
+20NargisiVegetable            0   0   0   0   0    0   2
+21PalakAndCorn                1   2   0   0   0    0   0
+24PaneerAndCubumberSandwich   0   0   0   0   2    0   0
+6ChickenCutletSandwich        0   0   0   1   0    0   0
+8ChickenFriedRice             1   0   0   0   0    0   0
+9ChickenKheemaParatha         0   0   0   0   0    0   2
+
+ [*,*,Snack]
+:                           FRI MON SAT SUN THUR TUE WED    :=
+10ChickenPestoPasta           0   2   0   0   0    0   0
+11CucumberSoyaPancakes        0   0   1   0   0    0   0
+18MethiThepla                 0   0   1   2   0    0   0
+23PaneerAndCornBurger         1   0   0   0   0    0   0
+25ScrambledEggsWithChicken    0   0   0   0   0    2   0
+3BoiledEggMayoSandwich        0   0   0   1   0    0   1
+6ChickenCutletSandwich        0   0   1   0   0    0   0
+7ChickenFrankie               0   0   0   0   1    0   0
+;
+
